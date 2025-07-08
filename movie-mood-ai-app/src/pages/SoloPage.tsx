@@ -1,3 +1,9 @@
+import { Form } from "../component/Form";
+
 export const SoloPage = () => {
-  return <div>Solo Page</div>;
+  return (
+    <div>
+      <Form />
+    </div>
+  );
 };
