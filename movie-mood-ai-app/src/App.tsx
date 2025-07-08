@@ -1,14 +1,23 @@
+import { Route, Routes } from "react-router-dom";
+
 import "./App.css";
-import movies from "./data/content"; // Adjust path accordingly
+import movies from "./data/content";
+import { SoloPage } from "./pages/SoloPage";
+import { GroupPage } from "./pages/GroupPage";
+import { Navbar } from "./component/Navbar";
 
 function App() {
   console.log(movies);
 
   return (
-    <div className="bg-gray-900 flex items-center justify-center h-screen">
-      <h1 className="text-4xl md:text-6xl font-bold text-white">
-        🎬 MovieMood
-      </h1>
+    <div className="bg-darkBlue text-white min-h-screen transition-opacity duration-700 pt-32">
+      <Navbar />
+      <div className="container mx-auto px-4 py-6 text-center">
+        <Routes>
+          <Route path="/solo" element={<SoloPage />} />
+          <Route path="/group" element={<GroupPage />} />
+        </Routes>
+      </div>
     </div>
   );
 }
