@@ -1,4 +1,80 @@
 import { useState } from "react";
+import { supabase } from "../supabase-client";
+import { openai } from "../openai-client";
+
+interface MovieEmbedding {
+  id: number;
+  content: {
+    pageContent: string;
+  };
+  embedding: number[];
+}
+// Get movie
+export const fetchMovie = async (
+  MovieID: number
+): Promise<MovieEmbedding[]> => {
+  const { error, data } = await supabase
+    .from("movies")
+    .select("*, content")
+    .eq("id", MovieID);
+
+  if (error) throw new Error(error.message);
+
+  console.log("data");
+  console.log(data);
+
+  return data as MovieEmbedding[];
+};
+
+await fetchMovie(1);
+
+// User query about podcasts
+const query = "Something peaceful and relaxing";
+main(query);
+
+// Bring all function calls together
+async function main(input: string) {
+  const embedding = await createEmbedding(input);
+  // const match = await findNearestMatch(embedding);
+  // await getChatCompletion(match, input);
+  console.log("embedding: " + embedding);
+}
+
+// Create an embedding vector representing the input text
+async function createEmbedding(input: string) {
+  const embeddingResponse = await openai.embeddings.create({
+    model: "text-embedding-ada-002",
+    input,
+  });
+  console.log(
+    "embeddingResponse.data[0].embedding " + embeddingResponse.data[0].embedding
+  );
+
+  return embeddingResponse.data[0].embedding;
+}
+
+// import podcasts from './content.js';
+
+// async function main(input) {
+// const data = await Promise.all(
+//     input.map( async (textChunk) => {
+//         const embeddingResponse = await openai.embeddings.create({
+//             model: "text-embedding-ada-002",
+//             input: textChunk
+//         });
+//         return {
+//         content: textChunk,
+//         embedding: embeddingResponse.data[0].embedding
+//         }
+//     })
+// );
+
+// // Insert content and embedding into Supabase
+// await supabase.from('documents').insert(data);
+// console.log('Embedding and storing complete!');
+// }
+
+// main(podcasts)
 
 export const Form = () => {
   const [formData, setFormData] = useState({
