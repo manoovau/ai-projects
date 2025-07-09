@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../supabase-client";
-import { openai } from "../openai-client";
+// import { openai } from "../openai-client";
 
 interface MovieEmbedding {
   id: number;
@@ -28,6 +28,7 @@ export const fetchMovie = async (
 
 await fetchMovie(1);
 
+/*
 // User query about podcasts
 const query = "Something peaceful and relaxing";
 main(query);
@@ -39,6 +40,9 @@ async function main(input: string) {
   // await getChatCompletion(match, input);
   console.log("embedding: " + embedding);
 }
+
+
+
 
 // Create an embedding vector representing the input text
 async function createEmbedding(input: string) {
@@ -52,6 +56,7 @@ async function createEmbedding(input: string) {
 
   return embeddingResponse.data[0].embedding;
 }
+*/
 
 // import podcasts from './content.js';
 
@@ -93,12 +98,30 @@ export const Form = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    console.log("Form submitted:", formData.favoriteMovie);
-    console.log("Form submitted:", formData.moodType);
-    console.log("Form submitted:", formData.tonePreference);
+
+    const prompt = `
+    My favorite movie is: ${formData.favoriteMovie}.
+    I'm in the mood for something: ${formData.moodType}.
+    I want something that feels: ${formData.tonePreference}.
+  `;
+
+    try {
+      const response = await fetch("http://localhost:3001/api/ask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      });
+
+      const data = await response.json();
+      console.log("💡 GPT Response:", data.result);
+      alert(data.result); // Or display it nicely in the UI
+    } catch (error) {
+      console.error("Error calling GPT backend:", error);
+    }
   };
 
   return (
