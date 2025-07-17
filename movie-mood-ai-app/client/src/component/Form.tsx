@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../supabase-client";
+import { type Movie } from "./Result";
+
 // import { openai } from "../openai-client";
 
 interface MovieEmbedding {
@@ -9,6 +11,11 @@ interface MovieEmbedding {
   };
   embedding: number[];
 }
+
+interface FormProps {
+  onSubmitComplete: (movies: Movie[]) => void;
+}
+
 // Get movie
 export const fetchMovie = async (
   MovieID: number
@@ -81,7 +88,7 @@ async function createEmbedding(input: string) {
 
 // main(podcasts)
 
-export const Form = () => {
+export const Form = ({ onSubmitComplete }: FormProps) => {
   const [formData, setFormData] = useState({
     favoriteMovie: "",
     moodType: "",
@@ -98,6 +105,32 @@ export const Form = () => {
     }));
   };
 
+  const extractArrayFromText = (text: string) => {
+    const arrayMatch = text.match(/\[\s*{[\s\S]*?}\s*\]/);
+
+    console.log("arrayMatch");
+
+    console.log(arrayMatch);
+    if (!arrayMatch) {
+      throw new Error("No array found in the input text");
+    }
+    let arrayText = arrayMatch[0];
+
+    arrayText = arrayText.replace(/([{,]\s*)(\w+)\s*:/g, '$1"$2":');
+
+    console.log("arrayText");
+
+    console.log(arrayText);
+    try {
+      console.log("return extractArrayFromText");
+      console.log(JSON.parse(arrayText));
+      return JSON.parse(arrayText);
+    } catch (err) {
+      console.error("Failed to parse JSON array:", err);
+      return [];
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -105,7 +138,10 @@ export const Form = () => {
     My favorite movie is: ${formData.favoriteMovie}.
     I'm in the mood for something: ${formData.moodType}.
     I want something that feels: ${formData.tonePreference}.
-  `;
+    Please, return the results in a array. Each entry should contain title, year and short explaniation.
+   [{title: "Jumanji: Welcome to the Jungle", year: 2008, description: "This is a fun, adventurous movie with lots of humor."},{title: "Pirates of the Caribbean", year: 2000, description: "Series - You'll enjoy these fun, adventurous movies featuring Johnny Depp as the eccentric Captain Jack Sparrow."}]. 
+  
+   `;
 
     try {
       const response = await fetch("http://localhost:3001/api/ask", {
@@ -118,7 +154,10 @@ export const Form = () => {
 
       const data = await response.json();
       console.log("💡 GPT Response:", data.result);
-      alert(data.result); // Or display it nicely in the UI
+      // alert(data.result); // Or display it nicely in the UI
+      const movieArray = extractArrayFromText(data.result);
+
+      onSubmitComplete(movieArray);
     } catch (error) {
       console.error("Error calling GPT backend:", error);
     }
