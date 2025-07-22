@@ -10,9 +10,15 @@ interface ResultProps {
   movie: Movie;
   setPosition: Dispatch<SetStateAction<number>>;
   posStr: string;
+  setResult: Dispatch<SetStateAction<Movie[] | null>>;
 }
 
-export const Result = ({ movie, setPosition, posStr }: ResultProps) => {
+export const Result = ({
+  movie,
+  setPosition,
+  posStr,
+  setResult,
+}: ResultProps) => {
   const { title, year, description } = movie;
   const [posterUrl, setPosterUrl] = useState<string | null>(null);
 
@@ -49,6 +55,14 @@ export const Result = ({ movie, setPosition, posStr }: ResultProps) => {
 
   return (
     <div className="bg-gray-800 text-white rounded-lg shadow-md p-6 mt-6 space-y-4 max-w-xl">
+      <div className="flex justify-end">
+        <button
+          onClick={() => setResult(null)}
+          className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-1 rounded-md transition duration-200"
+        >
+          Reset
+        </button>
+      </div>
       {posterUrl && (
         <img
           src={posterUrl}
@@ -62,7 +76,6 @@ export const Result = ({ movie, setPosition, posStr }: ResultProps) => {
       <p className="text-gray-300 text-justify block leading-relaxed whitespace-pre-line">
         {description}
       </p>
-
       {posStr === "initial" && (
         <div className="flex justify-center">
           <button

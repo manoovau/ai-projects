@@ -29,6 +29,7 @@ export const SoloPage = () => {
           movie={result[position]}
           setPosition={setPosition}
           posStr={posStr}
+          setResult={setResult}
         />
       )}
     </div>
