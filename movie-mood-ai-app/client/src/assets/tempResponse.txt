@@ -1,0 +1,32 @@
+GPT Response: [
+{title: "The Grand Budapest Hotel", year: 2014, description: "The adventures of Gustave H, a legendary concierge at a famous hotel from the fictional Republic of Zubrowka between the first and second World Wars, and Zero Moustafa, the lobby boy who becomes his most trusted friend."},
+{title: "Baby Driver", year: 2017, description: "After being coerced into working for a crime boss, a young getaway driver finds himself taking part in a heist doomed to fail."},
+{title: "The Secret Life of Walter Mitty", year: 2013, description: "When his job along with that of his coworker are threatened, Walter takes action in the real world embarking on a global journey that turns into an adventure more extraordinary than anything he could have ever imagined."},
+{title: "Guardians of the Galaxy", year: 2014, description: "A group of intergalactic criminals must pull together to stop a fanatical warrior with plans to purge the universe."},
+{title: "La La Land", year: 2016, description: "While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations for the future."}
+] Form.tsx:157:15
+arrayMatch Form.tsx:111:13
+Array [ '[\n{title: "The Grand Budapest Hotel", year: 2014, description: "The adventures of Gustave H, a legendary concierge at a famous hotel from the fictional Republic of Zubrowka between the first and second World Wars, and Zero Moustafa, the lobby boy who becomes his most trusted friend."},\n{title: "Baby Driver", year: 2017, description: "After being coerced into working for a crime boss, a young getaway driver finds himself taking part in a heist doomed to fail."},\n{title: "The Secret Life of Walter Mitty", year: 2013, description: "When his job along with that of his coworker are threatened, Walter takes action in the real world embarking on a global journey that turns into an adventure more extraordinary than anything he could have ever imagined."},\n{title: "Guardians of the Galaxy", year: 2014, description: "A group of intergalactic criminals must pull together to stop a fanatical warrior with plans to purge the universe."},\n{title: "La La Land", year: 2016, description: "While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations for the future."}\n]' ]
+Form.tsx:113:13
+arrayText Form.tsx:121:13
+[
+{"title": "The Grand Budapest Hotel", "year": 2014, "description": "The adventures of Gustave H, a legendary concierge at a famous hotel from the fictional Republic of Zubrowka between the first and second World Wars, and Zero Moustafa, the lobby boy who becomes his most trusted friend."},
+{"title": "Baby Driver", "year": 2017, "description": "After being coerced into working for a crime boss, a young getaway driver finds himself taking part in a heist doomed to fail."},
+{"title": "The Secret Life of Walter Mitty", "year": 2013, "description": "When his job along with that of his coworker are threatened, Walter takes action in the real world embarking on a global journey that turns into an adventure more extraordinary than anything he could have ever imagined."},
+{"title": "Guardians of the Galaxy", "year": 2014, "description": "A group of intergalactic criminals must pull together to stop a fanatical warrior with plans to purge the universe."},
+{"title": "La La Land", "year": 2016, "description": "While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations for the future."}
+] Form.tsx:123:13
+return extractArrayFromText Form.tsx:125:15
+Array(5) [ {…}, {…}, {…}, {…}, {…} ]
+​
+0: Object { title: "The Grand Budapest Hotel", year: 2014, description: "The adventures of Gustave H, a legendary concierge at a famous hotel from the fictional Republic of Zubrowka between the first and second World Wars, and Zero Moustafa, the lobby boy who becomes his most trusted friend." }
+​
+1: Object { title: "Baby Driver", year: 2017, description: "After being coerced into working for a crime boss, a young getaway driver finds himself taking part in a heist doomed to fail." }
+​
+2: Object { title: "The Secret Life of Walter Mitty", year: 2013, description: "When his job along with that of his coworker are threatened, Walter takes action in the real world embarking on a global journey that turns into an adventure more extraordinary than anything he could have ever imagined." }
+​
+3: Object { title: "Guardians of the Galaxy", year: 2014, description: "A group of intergalactic criminals must pull together to stop a fanatical warrior with plans to purge the universe." }
+​
+4: Object { title: "La La Land", year: 2016, description: "While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations for the future." }
+​
+length: 5

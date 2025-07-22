@@ -95,6 +95,8 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
     tonePreference: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -133,12 +135,14 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     const prompt = `
     My favorite movie is: ${formData.favoriteMovie}.
     I'm in the mood for something: ${formData.moodType}.
     I want something that feels: ${formData.tonePreference}.
-    Please, return the results in a array. Each entry should contain title, year and short explaniation.
+    Please, return the results in a array. Each entry should be a object with the keys title, year and description.
+    e.g:
    [{title: "Jumanji: Welcome to the Jungle", year: 2008, description: "This is a fun, adventurous movie with lots of humor."},{title: "Pirates of the Caribbean", year: 2000, description: "Series - You'll enjoy these fun, adventurous movies featuring Johnny Depp as the eccentric Captain Jack Sparrow."}]. 
   
    `;
@@ -153,13 +157,25 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
       });
 
       const data = await response.json();
-      console.log("💡 GPT Response:", data.result);
-      // alert(data.result); // Or display it nicely in the UI
-      const movieArray = extractArrayFromText(data.result);
+      console.log("GPT Response:", data.result);
+      const tempResponse = `[
+            {title: "The Grand Budapest Hotel", year: 2014, description: "The adventures of Gustave H, a legendary concierge at a famous hotel from the fictional Republic of Zubrowka between the first and second World Wars, and Zero Moustafa, the lobby boy who becomes his most trusted friend."},
+            {title: "Baby Driver", year: 2017, description: "After being coerced into working for a crime boss, a young getaway driver finds himself taking part in a heist doomed to fail."},
+            {title: "The Secret Life of Walter Mitty", year: 2013, description: "When his job along with that of his coworker are threatened, Walter takes action in the real world embarking on a global journey that turns into an adventure more extraordinary than anything he could have ever imagined."},
+            {title: "Guardians of the Galaxy", year: 2014, description: "A group of intergalactic criminals must pull together to stop a fanatical warrior with plans to purge the universe."},
+            {title: "La La Land", year: 2016, description: "While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations for the future."}
+            ]`;
+
+      const movieArray = extractArrayFromText(tempResponse);
+
+      // Remove this when you need to use Chatgpt
+      // const movieArray = extractArrayFromText(data.result);
 
       onSubmitComplete(movieArray);
     } catch (error) {
       console.error("Error calling GPT backend:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -218,9 +234,12 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
 
       <button
         type="submit"
-        className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md font-semibold transition"
+        disabled={loading}
+        className={`${
+          loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
+        } px-4 py-2 rounded-md font-semibold transition`}
       >
-        Submit
+        {loading ? "Loading..." : "Submit"}
       </button>
     </form>
   );
