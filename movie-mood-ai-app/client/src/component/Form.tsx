@@ -133,7 +133,8 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Send prompt to GPT backend
+  const handleAskGPT = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
@@ -158,18 +159,18 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
 
       const data = await response.json();
       console.log("GPT Response:", data.result);
-      const tempResponse = `[
-            {title: "The Grand Budapest Hotel", year: 2014, description: "The adventures of Gustave H, a legendary concierge at a famous hotel from the fictional Republic of Zubrowka between the first and second World Wars, and Zero Moustafa, the lobby boy who becomes his most trusted friend."},
-            {title: "Baby Driver", year: 2017, description: "After being coerced into working for a crime boss, a young getaway driver finds himself taking part in a heist doomed to fail."},
-            {title: "The Secret Life of Walter Mitty", year: 2013, description: "When his job along with that of his coworker are threatened, Walter takes action in the real world embarking on a global journey that turns into an adventure more extraordinary than anything he could have ever imagined."},
-            {title: "Guardians of the Galaxy", year: 2014, description: "A group of intergalactic criminals must pull together to stop a fanatical warrior with plans to purge the universe."},
-            {title: "La La Land", year: 2016, description: "While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations for the future."}
-            ]`;
+      // const tempResponse = `[
+      //       {title: "The Grand Budapest Hotel", year: 2014, description: "The adventures of Gustave H, a legendary concierge at a famous hotel from the fictional Republic of Zubrowka between the first and second World Wars, and Zero Moustafa, the lobby boy who becomes his most trusted friend."},
+      //       {title: "Baby Driver", year: 2017, description: "After being coerced into working for a crime boss, a young getaway driver finds himself taking part in a heist doomed to fail."},
+      //       {title: "The Secret Life of Walter Mitty", year: 2013, description: "When his job along with that of his coworker are threatened, Walter takes action in the real world embarking on a global journey that turns into an adventure more extraordinary than anything he could have ever imagined."},
+      //       {title: "Guardians of the Galaxy", year: 2014, description: "A group of intergalactic criminals must pull together to stop a fanatical warrior with plans to purge the universe."},
+      //       {title: "La La Land", year: 2016, description: "While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations for the future."}
+      //       ]`;
 
-      const movieArray = extractArrayFromText(tempResponse);
+      // const movieArray = extractArrayFromText(tempResponse);
 
       // Remove this when you need to use Chatgpt
-      // const movieArray = extractArrayFromText(data.result);
+      const movieArray = extractArrayFromText(data.result);
 
       onSubmitComplete(movieArray);
     } catch (error) {
@@ -179,9 +180,32 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
     }
   };
 
+  // Call backend embedding search
+  const handleEmbeddingSearch = async () => {
+    setLoading(true);
+    const response = await fetch("http://localhost:3001/api/embedding-search", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const result = await response.json();
+    console.log(`Frontend result embeddding`);
+    console.log(result);
+
+    onSubmitComplete(result.results);
+
+    try {
+    } catch (error) {
+      console.error(`Emebedding search error ${error}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={(e) => e.preventDefault()}
       className="bg-darkBlue text-white p-6 rounded-xl max-w-lg mx-auto space-y-6 shadow-lg"
     >
       <div>
@@ -233,13 +257,22 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
       </div>
 
       <button
-        type="submit"
+        onClick={handleAskGPT}
         disabled={loading}
         className={`${
           loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
-        } px-4 py-2 rounded-md font-semibold transition`}
+        } mx-4 px-4 py-2 rounded-md font-semibold transition`}
       >
-        {loading ? "Loading..." : "Submit"}
+        {loading ? "Loading..." : "Ask GPT"}
+      </button>
+      <button
+        onClick={handleEmbeddingSearch}
+        disabled={loading}
+        className={`${
+          loading ? "bg-green-400" : "bg-green-600 hover:bg-green-700"
+        } mx-4 px-4 py-2 rounded-md font-semibold transition`}
+      >
+        {loading ? "Loading..." : "Check your database"}
       </button>
     </form>
   );

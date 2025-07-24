@@ -57,7 +57,10 @@ export const Result = ({
     <div className="bg-gray-800 text-white rounded-lg shadow-md p-6 mt-6 space-y-4 max-w-xl">
       <div className="flex justify-end">
         <button
-          onClick={() => setResult(null)}
+          onClick={() => {
+            setResult(null);
+            setPosition(0);
+          }}
           className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-1 rounded-md transition duration-200"
         >
           Reset
@@ -90,16 +93,16 @@ export const Result = ({
       {posStr === "middle" && (
         <div className="flex justify-center gap-6 mt-4">
           <button
-            onClick={() => setPosition((prev) => prev + 1)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md transition duration-200"
-          >
-            Next Movie
-          </button>
-          <button
             onClick={() => setPosition((prev) => prev - 1)}
             className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md transition duration-200"
           >
             Previous Movie
+          </button>
+          <button
+            onClick={() => setPosition((prev) => prev + 1)}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md transition duration-200"
+          >
+            Next Movie
           </button>
         </div>
       )}

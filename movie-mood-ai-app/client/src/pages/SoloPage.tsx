@@ -22,7 +22,7 @@ export const SoloPage = () => {
 
   return (
     <div className="min-h-screen bg-darkBlue text-white flex justify-center items-start p-10">
-      {!result ? (
+      {!result || result.length === 0 ? (
         <Form onSubmitComplete={setResult} />
       ) : (
         <Result

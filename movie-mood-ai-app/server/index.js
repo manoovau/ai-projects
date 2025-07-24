@@ -4,6 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const OpenAI = require("openai");
 const axios = require("axios");
+const { createClient } = require("@supabase/supabase-js");
 
 dotenv.config();
 
@@ -61,12 +62,14 @@ const openai = new OpenAI({
 app.use(cors());
 app.use(express.json());
 
+// Chat GPT
 app.post("/api/ask", async (req, res) => {
   try {
     const { prompt } = req.body;
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      // model: "gpt-4",
+      model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
@@ -83,6 +86,61 @@ app.post("/api/ask", async (req, res) => {
   } catch (error) {
     console.error("OpenAI Error:", error);
     res.status(500).json({ error: "Something went wrong." });
+  }
+});
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
+app.post("/api/embedding-search", async (req, res) => {
+  const { favoriteMovie, moodType, tonePreference } = req.body;
+
+  const input = `
+    My favorite movie is: ${favoriteMovie}.
+    I'm in the mood for something: ${moodType}.
+    I want something that feels: ${tonePreference}.
+  `;
+
+  try {
+    // Create embedding
+    const embeddingResponse = await openai.embeddings.create({
+      model: "text-embedding-ada-002",
+      input,
+    });
+
+    const embedding = embeddingResponse.data[0].embedding;
+
+    console.log("Embedding for manual testing:", JSON.stringify(embedding));
+
+    // Call supabase RPC
+    const { data, error } = await supabase.rpc("match_movies", {
+      query_embedding: embedding,
+      match_threshold: 0.5,
+      match_count: 5,
+    });
+
+    if (error) throw error;
+
+    const results = data.map((item) => {
+      const text =
+        typeof item.content === "string"
+          ? item.content
+          : item.content?.pageContent || "Unknown content";
+
+      return {
+        title: text.split(":")[0] || "Unknown",
+        year: "N/A",
+        description: text,
+      };
+    });
+
+    console.log("Backend embedding results:", results);
+    res.json({ results });
+  } catch (error) {
+    console.error("Embedding Search Error:", error);
+    res.status(500).json({ error: "Failed to process embedding search" });
   }
 });
 
