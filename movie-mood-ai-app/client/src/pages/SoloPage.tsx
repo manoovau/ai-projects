@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Form } from "../component/Form";
 import { Result, type Movie } from "../component/Result";
 
+type positionStr = "initial" | "final" | "middle" | "none";
+
 export const SoloPage = () => {
   const [result, setResult] = useState<Movie[] | null>(null);
   const [position, setPosition] = useState<number>(0);
 
-  const checkPosition = () => {
+  const checkPosition = (): positionStr => {
     if (!result || result.length === 0) return "none";
 
     if (position === 0) {

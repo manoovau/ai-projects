@@ -5,6 +5,7 @@ import movies from "./data/content";
 import { SoloPage } from "./pages/SoloPage";
 import { GroupPage } from "./pages/GroupPage";
 import { Navbar } from "./component/Navbar";
+import { AdminPage } from "./pages/AdminPage";
 
 function App() {
   console.log(movies);
@@ -16,6 +17,7 @@ function App() {
         <Routes>
           <Route path="/solo" element={<SoloPage />} />
           <Route path="/group" element={<GroupPage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </div>
     </div>

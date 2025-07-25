@@ -16,6 +16,8 @@ interface FormProps {
   onSubmitComplete: (movies: Movie[]) => void;
 }
 
+type ActiveBtnType = "GPT" | "DATABASE";
+
 // Get movie
 export const fetchMovie = async (
   MovieID: number
@@ -96,6 +98,7 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [activeBtn, setActieBtn] = useState<ActiveBtnType | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -137,6 +140,7 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
   const handleAskGPT = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setActieBtn("GPT");
 
     const prompt = `
     My favorite movie is: ${formData.favoriteMovie}.
@@ -177,12 +181,14 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
       console.error("Error calling GPT backend:", error);
     } finally {
       setLoading(false);
+      setActieBtn(null);
     }
   };
 
   // Call backend embedding search
   const handleEmbeddingSearch = async () => {
     setLoading(true);
+    setActieBtn("DATABASE");
     const response = await fetch("http://localhost:3001/api/embedding-search", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -200,6 +206,7 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
       console.error(`Emebedding search error ${error}`);
     } finally {
       setLoading(false);
+      setActieBtn(null);
     }
   };
 
@@ -255,25 +262,28 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
           required
         />
       </div>
-
-      <button
-        onClick={handleAskGPT}
-        disabled={loading}
-        className={`${
-          loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
-        } mx-4 px-4 py-2 rounded-md font-semibold transition`}
-      >
-        {loading ? "Loading..." : "Ask GPT"}
-      </button>
-      <button
-        onClick={handleEmbeddingSearch}
-        disabled={loading}
-        className={`${
-          loading ? "bg-green-400" : "bg-green-600 hover:bg-green-700"
-        } mx-4 px-4 py-2 rounded-md font-semibold transition`}
-      >
-        {loading ? "Loading..." : "Check your database"}
-      </button>
+      {activeBtn !== "DATABASE" && (
+        <button
+          onClick={handleAskGPT}
+          disabled={loading}
+          className={`${
+            loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
+          } mx-4 px-4 py-2 rounded-md font-semibold transition`}
+        >
+          {loading ? "Loading..." : "Ask GPT"}
+        </button>
+      )}
+      {activeBtn !== "GPT" && (
+        <button
+          onClick={handleEmbeddingSearch}
+          disabled={loading}
+          className={`${
+            loading ? "bg-green-400" : "bg-green-600 hover:bg-green-700"
+          } mx-4 px-4 py-2 rounded-md font-semibold transition`}
+        >
+          {loading ? "Loading..." : "Check your database"}
+        </button>
+      )}
     </form>
   );
 };

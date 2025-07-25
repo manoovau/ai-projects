@@ -144,6 +144,49 @@ app.post("/api/embedding-search", async (req, res) => {
   }
 });
 
+app.post("/api/seed-movies", async (req, res) => {
+  const movies = req.body;
+
+  try {
+    // Prepare embedding input strings
+    const formattedMovies = movies.map((movie) => ({
+      stringified: JSON.stringify({
+        title: movie.title,
+        releaseYear: movie.releaseYear,
+        content: movie.content,
+      }),
+      original: movie,
+    }));
+
+    // Generate embeddings
+    const inputs = formattedMovies.map((m) => m.stringified);
+    const embeddingResponse = await openai.embeddings.create({
+      model: "text-embedding-ada-002",
+      input: inputs,
+    });
+
+    const embeds = embeddingResponse.data.map((d) => d.embedding);
+
+    // Insert into Supabase
+    const inserts = formattedMovies.map((movie, i) => ({
+      content: movie.stringified,
+      embedding: embeds[i],
+    }));
+
+    const { data, error } = await supabase.from("movie_mood").insert(inserts);
+
+    if (error) {
+      console.error("❌ Supabase insert error:", error);
+      return res.status(500).json({ error: "Failed to insert movies" });
+    }
+
+    res.status(200).json({ message: "✅ Movies inserted", data });
+  } catch (error) {
+    console.error("❌ Error seeding movies with embedding:", error);
+    res.status(500).json({ error: "Server error seeding movies" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`🚀 Server running on http://localhost:${port}`);
 });
