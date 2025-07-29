@@ -15,9 +15,9 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/api/imdb-poster", async (req, res) => {
-  const { title, year } = req.body;
+  const { title, releaseYear } = req.body;
 
-  console.log("🎬 Searching TMDb for:", title, year);
+  console.log("🎬 Searching TMDb for:", title, releaseYear);
 
   const SEARCH_URL = "https://api.themoviedb.org/3/search/movie";
 
@@ -26,7 +26,7 @@ app.post("/api/imdb-poster", async (req, res) => {
       params: {
         api_key: process.env.TMDB_API_KEY,
         query: title,
-        year,
+        releaseYear,
       },
     });
 
@@ -94,6 +94,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+// embedding inputs
 app.post("/api/embedding-search", async (req, res) => {
   const { favoriteMovie, moodType, tonePreference } = req.body;
 
@@ -115,7 +116,7 @@ app.post("/api/embedding-search", async (req, res) => {
     console.log("Embedding for manual testing:", JSON.stringify(embedding));
 
     // Call supabase RPC
-    const { data, error } = await supabase.rpc("match_movies", {
+    const { data, error } = await supabase.rpc("match_movie_mood", {
       query_embedding: embedding,
       match_threshold: 0.5,
       match_count: 5,
@@ -127,12 +128,16 @@ app.post("/api/embedding-search", async (req, res) => {
       const text =
         typeof item.content === "string"
           ? item.content
-          : item.content?.pageContent || "Unknown content";
+          : item.content?.title || "Unknown content";
 
       return {
-        title: text.split(":")[0] || "Unknown",
-        year: "N/A",
-        description: text,
+        title:
+          text.split(`{"title":"`)[1].split(`","releaseYear":"`)[0] ||
+          "Unknown",
+        releaseYear:
+          text.split(`"releaseYear":"`)[1].split(`","content":"`)[0] ||
+          "Unknown",
+        content: text.split(`"content":"`)[1].split(`"}`)[0] || "Unknown",
       };
     });
 
@@ -144,6 +149,7 @@ app.post("/api/embedding-search", async (req, res) => {
   }
 });
 
+// Add json file in supabase table
 app.post("/api/seed-movies", async (req, res) => {
   const movies = req.body;
 

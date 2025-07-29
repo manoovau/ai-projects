@@ -2,8 +2,8 @@ import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 
 export interface Movie {
   title: string;
-  year: number;
-  description: string;
+  releaseYear: number;
+  content: string;
 }
 
 interface ResultProps {
@@ -19,7 +19,7 @@ export const Result = ({
   posStr,
   setResult,
 }: ResultProps) => {
-  const { title, year, description } = movie;
+  const { title, releaseYear, content } = movie;
   const [posterUrl, setPosterUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export const Result = ({
         const response = await fetch("http://localhost:3001/api/imdb-poster", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title, year }),
+          body: JSON.stringify({ title, releaseYear }),
         });
         const text = await response.text(); // 🔍 read raw response
         console.log("Raw response:", text);
@@ -51,7 +51,7 @@ export const Result = ({
     };
 
     fetchPoster();
-  }, [title, year]);
+  }, [title, releaseYear]);
 
   return (
     <div className="bg-gray-800 text-white rounded-lg shadow-md p-6 mt-6 space-y-4 max-w-xl">
@@ -74,10 +74,10 @@ export const Result = ({
         />
       )}
       <h3 className="text-2xl font-bold">
-        {title} <span className="text-gray-400 text-lg">({year})</span>
+        {title} <span className="text-gray-400 text-lg">({releaseYear})</span>
       </h3>
       <p className="text-gray-300 text-justify block leading-relaxed whitespace-pre-line">
-        {description}
+        {content}
       </p>
       {posStr === "initial" && (
         <div className="flex justify-center">

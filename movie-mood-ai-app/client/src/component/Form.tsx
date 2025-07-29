@@ -1,94 +1,12 @@
 import { useState } from "react";
-import { supabase } from "../supabase-client";
 import { type Movie } from "./Result";
-
-// import { openai } from "../openai-client";
-
-interface MovieEmbedding {
-  id: number;
-  content: {
-    pageContent: string;
-  };
-  embedding: number[];
-}
+import mockResults from "../data/mock_embedding_result"; // adjust the path if needed
 
 interface FormProps {
   onSubmitComplete: (movies: Movie[]) => void;
 }
 
-type ActiveBtnType = "GPT" | "DATABASE";
-
-// Get movie
-export const fetchMovie = async (
-  MovieID: number
-): Promise<MovieEmbedding[]> => {
-  const { error, data } = await supabase
-    .from("movies")
-    .select("*, content")
-    .eq("id", MovieID);
-
-  if (error) throw new Error(error.message);
-
-  console.log("data");
-  console.log(data);
-
-  return data as MovieEmbedding[];
-};
-
-await fetchMovie(1);
-
-/*
-// User query about podcasts
-const query = "Something peaceful and relaxing";
-main(query);
-
-// Bring all function calls together
-async function main(input: string) {
-  const embedding = await createEmbedding(input);
-  // const match = await findNearestMatch(embedding);
-  // await getChatCompletion(match, input);
-  console.log("embedding: " + embedding);
-}
-
-
-
-
-// Create an embedding vector representing the input text
-async function createEmbedding(input: string) {
-  const embeddingResponse = await openai.embeddings.create({
-    model: "text-embedding-ada-002",
-    input,
-  });
-  console.log(
-    "embeddingResponse.data[0].embedding " + embeddingResponse.data[0].embedding
-  );
-
-  return embeddingResponse.data[0].embedding;
-}
-*/
-
-// import podcasts from './content.js';
-
-// async function main(input) {
-// const data = await Promise.all(
-//     input.map( async (textChunk) => {
-//         const embeddingResponse = await openai.embeddings.create({
-//             model: "text-embedding-ada-002",
-//             input: textChunk
-//         });
-//         return {
-//         content: textChunk,
-//         embedding: embeddingResponse.data[0].embedding
-//         }
-//     })
-// );
-
-// // Insert content and embedding into Supabase
-// await supabase.from('documents').insert(data);
-// console.log('Embedding and storing complete!');
-// }
-
-// main(podcasts)
+type ActiveBtnType = "GPT" | "DATABASE" | "MOCK";
 
 export const Form = ({ onSubmitComplete }: FormProps) => {
   const [formData, setFormData] = useState({
@@ -96,6 +14,7 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
     moodType: "",
     tonePreference: "",
   });
+  const RESULT_NUM = 5;
 
   const [loading, setLoading] = useState(false);
   const [activeBtn, setActieBtn] = useState<ActiveBtnType | null>(null);
@@ -146,9 +65,9 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
     My favorite movie is: ${formData.favoriteMovie}.
     I'm in the mood for something: ${formData.moodType}.
     I want something that feels: ${formData.tonePreference}.
-    Please, return the results in a array. Each entry should be a object with the keys title, year and description.
+    Please, return the results(${RESULT_NUM} movies) in a array. Each entry should be a object with the keys title, releaseYear and content.
     e.g:
-   [{title: "Jumanji: Welcome to the Jungle", year: 2008, description: "This is a fun, adventurous movie with lots of humor."},{title: "Pirates of the Caribbean", year: 2000, description: "Series - You'll enjoy these fun, adventurous movies featuring Johnny Depp as the eccentric Captain Jack Sparrow."}]. 
+   [{title: "Jumanji: Welcome to the Jungle", releaseYear: 2008, content: "This is a fun, adventurous movie with lots of humor."},{title: "Pirates of the Caribbean", releaseYear: 2000, content: "Series - You'll enjoy these fun, adventurous movies featuring Johnny Depp as the eccentric Captain Jack Sparrow."}]. 
   
    `;
 
@@ -163,17 +82,7 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
 
       const data = await response.json();
       console.log("GPT Response:", data.result);
-      // const tempResponse = `[
-      //       {title: "The Grand Budapest Hotel", year: 2014, description: "The adventures of Gustave H, a legendary concierge at a famous hotel from the fictional Republic of Zubrowka between the first and second World Wars, and Zero Moustafa, the lobby boy who becomes his most trusted friend."},
-      //       {title: "Baby Driver", year: 2017, description: "After being coerced into working for a crime boss, a young getaway driver finds himself taking part in a heist doomed to fail."},
-      //       {title: "The Secret Life of Walter Mitty", year: 2013, description: "When his job along with that of his coworker are threatened, Walter takes action in the real world embarking on a global journey that turns into an adventure more extraordinary than anything he could have ever imagined."},
-      //       {title: "Guardians of the Galaxy", year: 2014, description: "A group of intergalactic criminals must pull together to stop a fanatical warrior with plans to purge the universe."},
-      //       {title: "La La Land", year: 2016, description: "While navigating their careers in Los Angeles, a pianist and an actress fall in love while attempting to reconcile their aspirations for the future."}
-      //       ]`;
 
-      // const movieArray = extractArrayFromText(tempResponse);
-
-      // Remove this when you need to use Chatgpt
       const movieArray = extractArrayFromText(data.result);
 
       onSubmitComplete(movieArray);
@@ -216,6 +125,26 @@ export const Form = ({ onSubmitComplete }: FormProps) => {
       className="bg-darkBlue text-white p-6 rounded-xl max-w-lg mx-auto space-y-6 shadow-lg"
     >
       <div>
+        <div className="flex justify-end mb-10">
+          {activeBtn !== "MOCK" && (
+            <button
+              onClick={() => {
+                setLoading(true);
+                setActieBtn("MOCK");
+                setTimeout(() => {
+                  onSubmitComplete(mockResults);
+                  setLoading(false);
+                }, 500);
+              }}
+              disabled={loading}
+              className={`${
+                loading ? "bg-yellow-400" : "bg-yellow-600 hover:bg-yellow-700"
+              } mx-4 px-4 py-2 rounded-md font-semibold transition justify`}
+            >
+              {loading ? "Loading..." : "Use Mock Data"}
+            </button>
+          )}
+        </div>
         <label htmlFor="favoriteMovie" className="block font-semibold mb-1">
           &nbsp;What&apos;s your favorite movie and why?
         </label>
