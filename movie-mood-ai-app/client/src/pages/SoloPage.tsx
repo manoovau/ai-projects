@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form } from "../component/Form";
+import { MovieForm } from "../component/MovieForm";
 import { Result, type Movie } from "../component/Result";
 
 type positionStr = "initial" | "final" | "middle" | "none";
@@ -25,7 +25,13 @@ export const SoloPage = () => {
   return (
     <div className="min-h-screen bg-darkBlue text-white flex justify-center items-start p-10">
       {!result || result.length === 0 ? (
-        <Form onSubmitComplete={setResult} />
+        <MovieForm
+          onSubmitComplete={setResult}
+          grouplimits={{
+            people: 0,
+            time: "",
+          }}
+        />
       ) : (
         <Result
           movie={result[position]}
