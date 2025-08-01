@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { type Movie } from "./Result";
-import mockResults from "../data/mock_embedding_result"; // adjust the path if needed
+import mockResults from "../data/mock_embedding_result";
 import { type GroupLimitType } from "../pages/GroupPage";
 
 interface FormProps {
@@ -12,10 +12,32 @@ type FormDataType = {
   favoriteMovie: string;
   moodType: string;
   tonePreference: string;
-  [key: string]: string; // <-- This allows dynamic keys
+  [key: string]: string; // Dynamic keys
 };
 
 type ActiveBtnType = "GPT" | "DATABASE" | "MOCK";
+
+function parseDurationToMinutes(time: string): number {
+  const lower = time.toLowerCase();
+
+  // Match "X hr" or "X hour"
+  const hoursMatch = lower.match(/(\d+)\s*(h|hr|hour|hours)/);
+  const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+
+  // Match "Y min" or "Y minutes"
+  const minutesMatch = lower.match(/(\d+)\s*(m|min|minute|minutes)/);
+  const minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
+
+  // Match formats like "110 min" with no hour part
+  if (!hours && !minutes) {
+    const justNumber = lower.match(/^\s*(\d+)\s*$/);
+    if (justNumber) {
+      return parseInt(justNumber[1], 10);
+    }
+  }
+
+  return hours * 60 + minutes;
+}
 
 export const MovieForm = ({ onSubmitComplete, grouplimits }: FormProps) => {
   const [formData, setFormData] = useState<FormDataType>({
@@ -34,6 +56,11 @@ export const MovieForm = ({ onSubmitComplete, grouplimits }: FormProps) => {
 
   const [loading, setLoading] = useState(false);
   const [activeBtn, setActieBtn] = useState<ActiveBtnType | null>(null);
+  const EMBEDDING_BTN_INIT = "Check your database";
+  const EMBEDDING_BTN_NO_DATA = "No data Found. Try with GPT";
+
+  const [embedddingBtnText, setEmbedddingBtnText] =
+    useState<string>(EMBEDDING_BTN_INIT);
 
   const [peopleCounter, setPeopleCounter] = useState<number>(0);
 
@@ -83,17 +110,18 @@ export const MovieForm = ({ onSubmitComplete, grouplimits }: FormProps) => {
     My favorite movies are: ${formDataGroup.favoriteMovie} .
     I'm in the mood for: ${formDataGroup.moodType}.
     I want a movie that feels: ${formDataGroup.tonePreference}.
-    Please, return the results(${RESULT_NUM} movies) in a array. Each entry should be a object with the keys title, releaseYear and content.
+    I have around ${grouplimits.time}. Only recommend movies with similar or shorter durations.
+    Please, return the results(${RESULT_NUM} movies) in a array. Each entry should be a object with the keys title, releaseYear and content (title, duration and description).
     e.g:
-   [{title: "Jumanji: Welcome to the Jungle", releaseYear: 2008, content: "This is a fun, adventurous movie with lots of humor."},{title: "Pirates of the Caribbean", releaseYear: 2000, content: "Series - You'll enjoy these fun, adventurous movies featuring Johnny Depp as the eccentric Captain Jack Sparrow."}]. 
+   [{title: "Jumanji: Welcome to the Jungle", releaseYear: 2008, content: "Jumanji: Welcome to the Jungle(1 hr 59 min): This is a fun, adventurous movie with lots of humor."},{title: "Barbie", releaseYear: 2023, content: "Barbie (1 hr 54 min): Barbie suffers a crisis that leads her to question her world and her existence. Adventure, Comedy, Fantasy film released in 2023. Directed by Greta Gerwig. Written by Greta Gerwig and Noah Baumbach. Starring Margot Robbie, Ryan Gosling and Issa Rae. Rated 7.0 on IMDB"}]. 
    `
         : `
     My favorite movie is: ${formData.favoriteMovie} .
     I'm in the mood for something: ${formData.moodType}.
     I want something that feels: ${formData.tonePreference}.
-    Please, return the results(${RESULT_NUM} movies) in a array. Each entry should be a object with the keys title, releaseYear and content.
+    Please, return the results(${RESULT_NUM} movies) in a array. Each entry should be a object with the keys title, releaseYear and content (title, duration and description).
     e.g:
-   [{title: "Jumanji: Welcome to the Jungle", releaseYear: 2008, content: "This is a fun, adventurous movie with lots of humor."},{title: "Pirates of the Caribbean", releaseYear: 2000, content: "Series - You'll enjoy these fun, adventurous movies featuring Johnny Depp as the eccentric Captain Jack Sparrow."}]. 
+   [{title: "Jumanji: Welcome to the Jungle", releaseYear: 2008, content: "Jumanji: Welcome to the Jungle(1 hr 59 min): This is a fun, adventurous movie with lots of humor."},{title: "Barbie", releaseYear: 2023, content: "Barbie (1 hr 54 min): Barbie suffers a crisis that leads her to question her world and her existence. Adventure, Comedy, Fantasy film released in 2023. Directed by Greta Gerwig. Written by Greta Gerwig and Noah Baumbach. Starring Margot Robbie, Ryan Gosling and Issa Rae. Rated 7.0 on IMDB"}]. 
    `;
 
     try {
@@ -123,17 +151,29 @@ export const MovieForm = ({ onSubmitComplete, grouplimits }: FormProps) => {
   const handleEmbeddingSearch = async () => {
     setLoading(true);
     setActieBtn("DATABASE");
+    const minutes = parseDurationToMinutes(grouplimits.time);
+
+    console.log("click handleEmbeddingSearch");
+    console.log("minutes");
+    console.log(minutes);
+    console.log("grouplimits.time");
+    console.log(grouplimits.time);
     const response = await fetch("http://localhost:3001/api/embedding-search", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({ formData, grouplimits, minutes }),
     });
 
     const result = await response.json();
-    console.log(`Frontend result embeddding`);
+    console.log(`Frontend result embeddding Movie Form`);
     console.log(result);
-
-    onSubmitComplete(result.results);
+    if (result.results.length === 0) {
+      setEmbedddingBtnText(EMBEDDING_BTN_NO_DATA);
+      console.log("Result length === 0 ");
+    } else {
+      onSubmitComplete(result.results);
+      console.log("Result length !== 0 ");
+    }
 
     try {
     } catch (error) {
@@ -145,10 +185,6 @@ export const MovieForm = ({ onSubmitComplete, grouplimits }: FormProps) => {
   };
 
   const handleNextPerson = () => {
-    //     favoriteMovie: "",
-    // moodType: "",
-    // tonePreference: "",
-
     setFormDataGroup((prev) => ({
       ...prev,
       favoriteMovie:
@@ -173,7 +209,19 @@ export const MovieForm = ({ onSubmitComplete, grouplimits }: FormProps) => {
       onSubmit={(e) => e.preventDefault()}
       className="bg-darkBlue text-white p-6 rounded-xl max-w-lg mx-auto space-y-6 shadow-lg"
     >
-      <div className="flex justify-end mb-10">
+      {embedddingBtnText === EMBEDDING_BTN_NO_DATA && (
+        <h3>
+          No Movie with this duration in your database. Please, try with the GPT
+          button
+        </h3>
+      )}
+      <div
+        className={`${
+          embedddingBtnText === EMBEDDING_BTN_NO_DATA
+            ? "justify-start"
+            : "justify-end"
+        }flex  mb-10 `}
+      >
         {activeBtn !== "GPT" &&
           activeBtn !== "DATABASE" &&
           (grouplimits.people === 0 ||
@@ -252,6 +300,7 @@ export const MovieForm = ({ onSubmitComplete, grouplimits }: FormProps) => {
           </div>
         </div>
       ) : null}
+
       {activeBtn !== "DATABASE" &&
         activeBtn !== "MOCK" &&
         (grouplimits.people === 0 ||
@@ -267,19 +316,21 @@ export const MovieForm = ({ onSubmitComplete, grouplimits }: FormProps) => {
             {loading ? "Loading..." : "Ask GPT"}
           </button>
         )}
+
       {activeBtn !== "GPT" &&
         activeBtn !== "MOCK" &&
+        embedddingBtnText !== EMBEDDING_BTN_NO_DATA &&
         (grouplimits.people === 0 ||
           (grouplimits.people !== 0 &&
             peopleCounter === grouplimits.people)) && (
           <button
             onClick={handleEmbeddingSearch}
-            disabled={loading}
+            disabled={loading || embedddingBtnText === EMBEDDING_BTN_NO_DATA}
             className={`${
               loading ? "bg-green-400" : "bg-green-600 hover:bg-green-700"
             } mx-4 px-4 py-2 rounded-md font-semibold transition`}
           >
-            {loading ? "Loading..." : "Check your database"}
+            {loading ? "Loading..." : embedddingBtnText}
           </button>
         )}
 
@@ -291,7 +342,11 @@ export const MovieForm = ({ onSubmitComplete, grouplimits }: FormProps) => {
             loading ? "bg-green-400" : "bg-green-600 hover:bg-green-700"
           } mx-4 px-4 py-2 rounded-md font-semibold transition`}
         >
-          {loading ? "Loading..." : "Next Person"}
+          {loading
+            ? "Loading..."
+            : peopleCounter + 1 === grouplimits.people
+            ? "Choose recommendation engine"
+            : "Next Person"}
         </button>
       )}
     </form>

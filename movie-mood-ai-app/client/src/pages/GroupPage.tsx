@@ -3,7 +3,7 @@ import { MovieForm } from "../component/MovieForm";
 import { Result, type Movie } from "../component/Result";
 import { GroupFormLimits } from "../component/GroupFormLimits";
 
-type positionStr = "initial" | "final" | "middle" | "none";
+type positionStr = "initial" | "final" | "middle" | "none" | "one";
 export interface GroupLimitType {
   people: number;
   time: string;
@@ -19,6 +19,8 @@ export const GroupPage = () => {
 
   const checkPosition = (): positionStr => {
     if (!result || result.length === 0) return "none";
+
+    if (result.length === 1) return "one";
 
     if (position === 0) {
       return "initial";

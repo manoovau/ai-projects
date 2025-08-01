@@ -94,14 +94,43 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+function extractDurationInMinutes(text) {
+  const lower = text.toLowerCase();
+
+  // Match "1 hr 50 min", "1 hour 50 minutes", "1hr 50min"
+  const hrMinMatch = lower.match(
+    /(\d+)\s*(h|hr|hour|hours)[^\d]*(\d+)?\s*(m|min|minute|minutes)?/
+  );
+  if (hrMinMatch) {
+    const hours = parseInt(hrMinMatch[1], 10);
+    const minutes = hrMinMatch[3] ? parseInt(hrMinMatch[3], 10) : 0;
+    return hours * 60 + minutes;
+  }
+
+  // Match "110 min", "110min", "90"
+  const minOnlyMatch = lower.match(/(\d+)\s*(m|min|minute|minutes)?/);
+  if (minOnlyMatch) {
+    return parseInt(minOnlyMatch[1], 10);
+  }
+  //
+  return null;
+}
+
 // embedding inputs
 app.post("/api/embedding-search", async (req, res) => {
-  const { favoriteMovie, moodType, tonePreference } = req.body;
+  const { formData, grouplimits, minutes } = req.body;
+  const { favoriteMovie, moodType, tonePreference } = formData;
+  const { time } = grouplimits;
 
   const input = `
     My favorite movie is: ${favoriteMovie}.
     I'm in the mood for something: ${moodType}.
     I want something that feels: ${tonePreference}.
+    ${
+      time !== ""
+        ? `I want a movie that fits within ${time} (approximately ${minutes} minutes).`
+        : ""
+    }
   `;
 
   try {
@@ -142,7 +171,29 @@ app.post("/api/embedding-search", async (req, res) => {
     });
 
     console.log("Backend embedding results:", results);
-    res.json({ results });
+
+    if (time !== "") {
+      const filteredResults = results.filter((movie) => {
+        const duration = extractDurationInMinutes(movie.content);
+        console.log("duration");
+        console.log(duration);
+        if (duration !== null) {
+          return duration <= minutes;
+        }
+
+        // No duration found
+        return [{ title: "Movie not Found", releaseYear: "", content: "" }];
+      });
+
+      console.log("filteredResults");
+      console.log(filteredResults);
+
+      return res.json({ results: filteredResults });
+    } else {
+      console.log("results no time");
+      console.log(results);
+      return res.json({ results });
+    }
   } catch (error) {
     console.error("Embedding Search Error:", error);
     res.status(500).json({ error: "Failed to process embedding search" });

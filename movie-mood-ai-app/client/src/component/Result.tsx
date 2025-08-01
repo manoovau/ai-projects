@@ -76,7 +76,7 @@ export const Result = ({
       <h3 className="text-2xl font-bold">
         {title} <span className="text-gray-400 text-lg">({releaseYear})</span>
       </h3>
-      <p className="text-gray-300 text-justify block leading-relaxed whitespace-pre-line">
+      <p className="text-gray-300 text-justify block leading-relaxed whitespace-pre-line pb-2">
         {content}
       </p>
       {posStr === "initial" && (

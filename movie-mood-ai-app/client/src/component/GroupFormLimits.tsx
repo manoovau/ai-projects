@@ -22,7 +22,7 @@ export const GroupFormLimits = ({ setGroupLimits }: FormProps) => {
     if (!isNaN(parsed)) {
       setPeople(Math.min(20, parsed));
     } else {
-      setPeople(0); // Or optionally do nothing, or track invalid input separately
+      setPeople(0);
     }
   };
 
