@@ -143,11 +143,12 @@ app.post("/api/embedding-search", async (req, res) => {
     const embedding = embeddingResponse.data[0].embedding;
 
     console.log("Embedding for manual testing:", JSON.stringify(embedding));
-
+    const MATCH_COUNT = time !== "" ? 10 : 5;
     // Call supabase RPC
     const { data, error } = await supabase.rpc("match_movie_mood", {
       query_embedding: embedding,
-      match_threshold: 0.5,
+      // Set similarity score [0 -1 ]: 0 = completely unrelated, 1 = perfect match
+      match_threshold: 0.75,
       match_count: 5,
     });
 

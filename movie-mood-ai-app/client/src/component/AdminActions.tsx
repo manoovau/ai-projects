@@ -1,17 +1,8 @@
 import { useState } from "react";
 import movies from "../data/content";
 
-interface credentailsType {
-  username: string;
-  pw: string;
-}
-
 export const AdminActions = () => {
   const [loading, setLoading] = useState(false);
-  const [credentials, setCredentials] = useState<credentailsType>({
-    username: "",
-    pw: "",
-  });
 
   const [isAuth, setAuth] = useState(false);
 
