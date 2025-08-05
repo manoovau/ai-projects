@@ -6,119 +6,291 @@ export interface Movie {
 
 // Movies info
 const movies: Movie[] = [
+  // 1940s
   {
-    title: "Avatar: The Way of the Water",
-    releaseYear: "2022",
+    title: "Casablanca",
+    releaseYear: "1942",
     content:
-      "Avatar: The Way of Water (3 hr 10 min): Jake Sully lives with his newfound family formed on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started, Jake must work with Neytiri and the army of the Na'vi race to protect their home. Action, Adventure, Fantasy film released in 2022. Directed by James Cameron Written by James Cameron, Rick Jaffa and Amanda Silver. Starring Sam Worthington, Zoe Saldana and Sigourney Weaver. Rated 7.6 on IMDB",
+      "Casablanca (102 min): An American expatriate must choose between his love for a woman and helping her and her fugitive husband escape Nazi capture in Casablanca. Directed by Michael Curtiz. Starring Humphrey Bogart, Ingrid Bergman. Drama/Romance, rated about 8.5 on IMDb.",
   },
   {
-    title: "The Fabelmans",
-    releaseYear: "2022",
+    title: "Citizen Kane",
+    releaseYear: "1941",
     content:
-      "The Fabelmans (2 hr 31 min): Growing up in post-World War II era Arizona, young Sammy Fabelman aspires to become a filmmaker as he reaches adolescence, but soon discovers a shattering family secret and explores how the power of films can help him see the truth. Drama film released in 2022. Directed by Steven Spielberg. Written by Steven Spielberg and Tony Kushner. Starring Michelle Williams, Gabriel LaBelle & Paul Dano. Rated 7.5 on IMDB",
+      "Citizen Kane (119 min): The rise and fall of Charles Foster Kane, a publishing tycoon, told in non‑linear flashbacks. Directed by Orson Welles. Drama/Mystery, rated about 8.3 on IMDb.",
   },
   {
-    title: "Troll",
-    releaseYear: "2022",
+    title: "It's a Wonderful Life",
+    releaseYear: "1946",
     content:
-      "Troll (1 hr 41 min): Deep in the Dovre mountain, something gigantic wakes up after a thousand years in captivity. The creature destroys everything in its path and quickly approaches Oslo. Norwegian action, adventure, drama film released in 2022. Directed by Roar Uthaug. Written by Espen Aukan and Roar Uthaug. Starring Ine Marie Wilmann, Kim Falck and Mads Sjøgård Pettersen. Rated 5.8 on IMDB",
+      "It's a Wonderful Life (130 min): An angel shows a community what life would have been like without a selfless man. Directed by Frank Capra. Starring James Stewart. Drama/Fantasy, rated about 8.6 on IMDb.",
   },
   {
-    title: "Everything Everywhere All at Once",
-    releaseYear: "2022",
+    title: "Bicycle Thieves",
+    releaseYear: "1948",
     content:
-      "Everything Everywhere All at Once (2 hr 19 min): A middle-aged Chinese immigrant is swept up into an insane adventure in which she alone can save existence by exploring other universes and connecting with the lives she could have led. Action, Adventure, Comedy film released in 2022. Directed by Daniel Kwan and Daniel Scheinert. Written by Daniel Kwan and Daniel Scheinert. Starring: Michelle Yeoh, Stephanie Hsu and Jamie Lee Curtis. Rated 7.8 on IMDB",
+      "Bicycle Thieves (89 min): A working‑class man in post‑war Rome searches for his stolen bicycle with his young son. Directed by Vittorio De Sica. Italian Neorealism drama, rated about 8.3 on IMDb.",
   },
   {
-    title: "Oppenheimer",
-    releaseYear: "2023",
+    title: "Double Indemnity",
+    releaseYear: "1944",
     content:
-      "Oppenheimer (3 hr): The story of American scientist, J. Robert Oppenheimer, and his role in the development of the atomic bomb. Biography, Drama, History film released in 2023. Directed by Christopher Nolan. Written by Christopher Nolan, Kai Bird and Martin Sherwin. Starring Cillian Murphy, Emily Blunt and Matt Damon. Rated 8.5 on IMDB",
+      "Double Indemnity (107 min): A seductive housewife and an insurance salesman plot a murder for profit. Directed by Billy Wilder. Film Noir/Crime, rated about 8.3 on IMDb.",
+  },
+
+  // 1950s
+  {
+    title: "Singin' in the Rain",
+    releaseYear: "1952",
+    content:
+      "Singin' in the Rain (103 min): Hollywood’s transition to sound shakes up careers and romance. Directed by Gene Kelly, Stanley Donen. Musical/Comedy, rated about 8.3 on IMDb.",
   },
   {
-    title: "Barbie",
-    releaseYear: "2023",
+    title: "Sunset Boulevard",
+    releaseYear: "1950",
     content:
-      "Barbie (1 hr 54 min): Barbie suffers a crisis that leads her to question her world and her existence. Adventure, Comedy, Fantasy film released in 2023. Directed by Greta Gerwig. Written by Greta Gerwig and Noah Baumbach. Starring Margot Robbie, Ryan Gosling and Issa Rae. Rated 7.0 on IMDB",
+      "Sunset Boulevard (110 min): A faded silent‑film star and a struggling screenwriter form a tragic bond. Directed by Billy Wilder. Film Noir/Drama, rated about 8.4 on IMDb.",
   },
   {
-    title: "Spider-Man: Across the Spider-Verse",
-    releaseYear: "2023",
+    title: "All About Eve",
+    releaseYear: "1950",
     content:
-      "Spider-Man: Across the Spider-Verse (2 hr 20 min): Miles Morales catapults across the Multiverse, where he encounters a team of Spider-People charged with protecting its very existence. When the heroes clash on how to handle a new threat, Miles must redefine what it means to be a hero. Animation, Action, Adventure film released in 2023. Directed by Joaquim Dos Santos, Kemp Powers an Justin K. Thompson. Written by Phil Lord, Christopher Miller and Dave Callaham. Starring: Shameik Moore, Hailee Steinfeld and Brian Tyree Henry. Rated 8.7 on IMDB",
+      "All About Eve (138 min): An aspiring actress insinuates herself into the life of an aging Broadway star. Directed by Joseph L. Mankiewicz. Drama, rated about 8.2 on IMDb.",
   },
   {
-    title: "Pathaan",
-    releaseYear: "2023",
+    title: "On the Waterfront",
+    releaseYear: "1954",
     content:
-      "Pathaan (2 hr 26 min): An Indian agent races against a doomsday clock as a ruthless mercenary, with a bitter vendetta, mounts an apocalyptic attack against the country. Bollywood action, adventure, triller film released in 2023. Directed by Siddharth Anand. Written by Shridhar Raghavan, Abbas Tyrewala and Siddharth Anand. Starring Shah Rukh Khan, Deepika Padukone and John Abraham. Rated 5.9 on IMDB",
+      "On the Waterfront (108 min): A dockworker stands up to corrupt union bosses. Directed by Elia Kazan. Starring Marlon Brando. Drama, rated about 8.1 on IMDb.",
   },
   {
-    title: "RRR",
-    releaseYear: "2022",
+    title: "Vertigo",
+    releaseYear: "1958",
     content:
-      "RRR (3 hr 7 min): A fictitious story about two legendary revolutionaries and their journey away from home before they started fighting for their country in the 1920s. South Indian action, drama film released in 2022. Directed by S. S. Rajamouli. Written by Vijayendra Prasad, S. S. Rajamouli and Sai Madhav Burra. Starring N. T. Rama Rao Jr., Ram Charan and Ajay Devgn. Rated 7.8 on IMDB",
+      "Vertigo (128 min): A retired detective develops an obsession while investigating his friend's wife. Directed by Alfred Hitchcock. Mystery/Thriller, rated about 8.3 on IMDb.",
+  },
+
+  // 1960s
+  {
+    title: "Lawrence of Arabia",
+    releaseYear: "1962",
+    content:
+      "Lawrence of Arabia (222 min): The epic story of T. E. Lawrence during WWI in the Arabian Peninsula. Directed by David Lean. Drama/Adventure, rated about 8.3 on IMDb.",
   },
   {
-    title: "Elemental",
-    releaseYear: "2023",
+    title: "Psycho",
+    releaseYear: "1960",
     content:
-      "Elemental (1 hr 41 min): Ember, a fiery young woman, and Wade, a go-with-the-flow guy, discover how much they actually have in common in a city where fire, water, land, and air residents live together. Animated Adventure Comedy film released in 2023. Directed by Peter Sohn. Starring Leah Lewis, Mamoudou Athie and Ronnie Del Carmen. Rated 7.0 on IMDB",
+      "Psycho (109 min): A secretary steals money and hides at a secluded motel with a troubled proprietor. Directed by Alfred Hitchcock. Horror/Thriller, rated about 8.5 on IMDb.",
   },
   {
-    title: "Top Gun: Maverick",
-    releaseYear: "2022",
+    title: "Dr. Strangelove",
+    releaseYear: "1964",
     content:
-      "Top Gun: Maverick (2 hr 10 min): After more than 30 years of service, Maverick trains a new group of Top Gun graduates for a high-risk mission, while confronting the ghosts of his past. Action, Drama film released in 2022. Directed by Joseph Kosinski. Starring Tom Cruise, Jennifer Connelly and Miles Teller. Rated 8.3 on IMDB",
+      "Dr. Strangelove (95 min): Cold War satire about nuclear disaster and military paranoia. Directed by Stanley Kubrick. Comedy, rated about 8.4 on IMDb.",
   },
   {
-    title: "The Menu",
-    releaseYear: "2022",
+    title: "Bonnie and Clyde",
+    releaseYear: "1967",
     content:
-      "The Menu (1 hr 47 min): A young couple travels to a remote island for an exclusive dining experience hosted by a celebrity chef who has prepared some shocking surprises. Comedy, Thriller film released in 2022. Directed by Mark Mylod. Starring Ralph Fiennes, Anya Taylor-Joy and Nicholas Hoult. Rated 7.2 on IMDB",
+      "Bonnie and Clyde (111 min): A glamorous outlaw couple on a crime spree during the Great Depression. Directed by Arthur Penn. Crime/Drama, rated about 7.9 on IMDb.",
   },
   {
-    title: "M3GAN",
-    releaseYear: "2022",
+    title: "2001: A Space Odyssey",
+    releaseYear: "1968",
     content:
-      "M3GAN (1 hr 42 min): A robotics engineer creates a life-like doll to be a child's companion, but the doll becomes overly protective and dangerous. Horror, Sci-Fi film released in 2022. Directed by Gerard Johnstone. Starring Allison Williams, Violet McGraw and Ronny Chieng. Rated 6.4 on IMDB",
+      "2001: A Space Odyssey (142 min): A voyage to Jupiter with HAL, an intelligent computer. Directed by Stanley Kubrick. Sci‑Fi/Adventure, rated about 8.3 on IMDb.",
+  },
+
+  // 1970s
+  {
+    title: "The Godfather",
+    releaseYear: "1972",
+    content:
+      "The Godfather (175 min): The aging patriarch of an organized crime dynasty transfers control to his reluctant son. Directed by Francis Ford Coppola. Crime/Drama, rated about 9.2 on IMDb.",
   },
   {
-    title: "Glass Onion",
-    releaseYear: "2022",
+    title: "The Godfather Part II",
+    releaseYear: "1974",
     content:
-      "Glass Onion (2 hr 19 min): Detective Benoit Blanc travels to a private Greek island when a tech billionaire invites his friends for a murder mystery party, but real dangers unfold. Comedy, Mystery film released in 2022. Directed by Rian Johnson. Starring Daniel Craig, Edward Norton and Kate Hudson. Rated 7.1 on IMDB",
+      "The Godfather Part II (202 min): Parallel stories of young Vito Corleone and his son’s rule over the mafia empire. Directed by Francis Ford Coppola. Crime/Drama, rated about 9.0 on IMDb.",
   },
   {
-    title: "The Super Mario Bros. Movie",
-    releaseYear: "2023",
+    title: "One Flew Over the Cuckoo's Nest",
+    releaseYear: "1975",
     content:
-      "The Super Mario Bros. Movie (1 hr 32 min): Brooklyn plumbers Mario and Luigi are transported to a magical world where they embark on an epic adventure to save a captured princess. Animation, Adventure, Comedy film released in 2023. Directed by Aaron Horvath, Michael Jelenic and Pierre Leduc. Starring Chris Pratt, Anya Taylor-Joy and Charlie Day. Rated 7.1 on IMDB",
+      "One Flew Over the Cuckoo's Nest (133 min): A rebellious inmate challenges a tyrannical nurse in a mental institution. Directed by Miloš Forman. Drama, rated about 8.7 on IMDb.",
   },
   {
-    title: "A Haunting in Venice",
-    releaseYear: "2023",
+    title: "Apocalypse Now",
+    releaseYear: "1979",
     content:
-      "A Haunting in Venice (1 hr 43 min): A retired detective attends a seance in post-WWII Venice, and when a guest is murdered, he is drawn into solving the case. Crime, Drama, Mystery film released in 2023. Directed by Kenneth Branagh. Starring Kenneth Branagh, Michelle Yeoh and Jamie Dornan. Rated 6.8 on IMDB",
+      "Apocalypse Now (153 min): A U.S. captain goes on a covert mission during the Vietnam War. Directed by Francis Ford Coppola. War/Drama, rated about 8.4 on IMDb.",
   },
   {
-    title: "Blue Beetle",
-    releaseYear: "2023",
+    title: "Chinatown",
+    releaseYear: "1974",
     content:
-      "Blue Beetle (2 hr 7 min): Jaime Reyes becomes the symbiotic host to an alien artifact called the Scarab, gaining extraordinary powers and a powerful armor suit. Action, Adventure, Sci-Fi film released in 2023. Directed by Angel Manuel Soto. Starring Xolo Maridueña, Bruna Marquezine and Becky G. Rated 6.7 on IMDB",
+      "Chinatown (130 min): A private eye uncovers dark secrets in 1930s Los Angeles water rights scandal. Directed by Roman Polański. Crime/Mystery, rated about 8.2 on IMDb.",
+  },
+
+  // 1980s
+  {
+    title: "Raging Bull",
+    releaseYear: "1980",
+    content:
+      "Raging Bull (129 min): The turbulent life of boxer Jake LaMotta. Directed by Martin Scorsese. Drama/Sport, rated about 8.2 on IMDb.",
   },
   {
-    title: "Expend4bles",
-    releaseYear: "2023",
+    title: "The Empire Strikes Back",
+    releaseYear: "1980",
     content:
-      "Expend4bles (1 hr 43 min): The Expendables, a team of elite mercenaries, undertake dangerous missions too risky for anyone else, relying on their firepower and loyalty. Action film released in 2023. Directed by Scott Waugh. Starring Jason Statham, 50 Cent and Megan Fox. Rated 5.0 on IMDB",
+      "The Empire Strikes Back (124 min): Luke Skywalker trains with Yoda while the Empire tightens its grip. Directed by Irvin Kershner. Sci‑Fi/Adventure, rated about 8.7 on IMDb.",
   },
   {
-    title: "Asteroid City",
-    releaseYear: "2023",
+    title: "The Shining",
+    releaseYear: "1980",
     content:
-      "Asteroid City (1 hr 45 min): A grieving father takes his family to a junior stargazing event in a remote desert town, where unexpected revelations transform his view of life. Comedy, Drama, Sci-Fi film released in 2023. Directed by Wes Anderson. Starring Jason Schwartzman, Scarlett Johansson and Tom Hanks. Rated 6.6 on IMDB",
+      "The Shining (146 min): A writer becomes dangerously influenced by spirits in a remote hotel. Directed by Stanley Kubrick. Horror, rated about 8.4 on IMDb.",
+  },
+  {
+    title: "Back to the Future",
+    releaseYear: "1985",
+    content:
+      "Back to the Future (116 min): A teen travels to 1955 and must reunite his parents to save his future. Directed by Robert Zemeckis. Sci‑Fi/Comedy, rated about 8.5 on IMDb.",
+  },
+  {
+    title: "Die Hard",
+    releaseYear: "1988",
+    content:
+      "Die Hard (132 min): A lone cop battles terrorists in a New York skyscraper. Directed by John McTiernan. Action/Thriller, rated about 8.2 on IMDb.",
+  },
+
+  // 1990s
+  {
+    title: "Goodfellas",
+    releaseYear: "1990",
+    content:
+      "Goodfellas (146 min): The rise and fall of Henry Hill in the mafia world. Directed by Martin Scorsese. Crime/Drama, rated about 8.7 on IMDb.",
+  },
+  {
+    title: "Pulp Fiction",
+    releaseYear: "1994",
+    content:
+      "Pulp Fiction (154 min): Interweaving stories of crime in Los Angeles. Directed by Quentin Tarantino. Crime/Comedy/Drama, rated about 8.9 on IMDb.",
+  },
+  {
+    title: "Schindler's List",
+    releaseYear: "1993",
+    content:
+      "Schindler's List (195 min): A German industrialist saves Jewish lives during WWII. Directed by Steven Spielberg. Drama/History, rated about 8.9 on IMDb.",
+  },
+  {
+    title: "Forrest Gump",
+    releaseYear: "1994",
+    content:
+      "Forrest Gump (142 min): A man with a low IQ experiences defining moments of American history. Directed by Robert Zemeckis. Drama/Romance, rated about 8.8 on IMDb.",
+  },
+  {
+    title: "The Matrix",
+    releaseYear: "1999",
+    content:
+      "The Matrix (136 min): A hacker learns his reality is a simulated construct. Directed by Lana Wachowski & Lilly Wachowski. Sci‑Fi/Action, rated about 8.7 on IMDb.",
+  },
+
+  // 2000s
+  {
+    title: "The Lord of the Rings: The Fellowship of the Ring",
+    releaseYear: "2001",
+    content:
+      "The Fellowship of the Ring (178 min): A hobbit begins an epic quest to destroy a powerful ring. Directed by Peter Jackson. Fantasy/Adventure, rated about 8.8 on IMDb.",
+  },
+  {
+    title: "Gladiator",
+    releaseYear: "2000",
+    content:
+      "Gladiator (155 min): A betrayed Roman general fights as a gladiator for revenge. Directed by Ridley Scott. Historical/Action, rated about 8.5 on IMDb.",
+  },
+  {
+    title: "The Dark Knight",
+    releaseYear: "2008",
+    content:
+      "The Dark Knight (152 min): Batman faces the Joker in Gotham City. Directed by Christopher Nolan. Superhero/Crime, rated about 9.0 on IMDb.",
+  },
+  {
+    title: "No Country for Old Men",
+    releaseYear: "2007",
+    content:
+      "No Country for Old Men (122 min): A hunter finds cash and encounters a ruthless killer. Directed by Coen Brothers. Thriller/Crime, rated about 8.1 on IMDb.",
+  },
+  {
+    title: "City of God",
+    releaseYear: "2002",
+    content:
+      "City of God (130 min): Two boys grow up in the violent slums of Rio de Janeiro. Directed by Fernando Meirelles. Drama/Crime, rated about 8.6 on IMDb.",
+  },
+
+  // 2010s
+  {
+    title: "Inception",
+    releaseYear: "2010",
+    content:
+      "Inception (148 min): A thief who enters dreams to steal secrets tries planting an idea. Directed by Christopher Nolan. Sci‑Fi/Thriller, rated about 8.8 on IMDb.",
+  },
+  {
+    title: "The Social Network",
+    releaseYear: "2010",
+    content:
+      "The Social Network (120 min): The founding of Facebook and ensuing lawsuits. Directed by David Fincher. Drama/Biography, rated about 7.7 on IMDb.",
+  },
+  {
+    title: "Parasite",
+    releaseYear: "2019",
+    content:
+      "Parasite (132 min): A poor family schemes to infiltrate a wealthy household. Directed by Bong Joon‑ho. Thriller/Drama, rated about 8.6 on IMDb.",
+  },
+  {
+    title: "Mad Max: Fury Road",
+    releaseYear: "2015",
+    content:
+      "Mad Max: Fury Road (120 min): A woman rebels against a tyrannical ruler in a post‑apocalyptic desert. Directed by George Miller. Action/Adventure, rated about 8.1 on IMDb.",
+  },
+  {
+    title: "La La Land",
+    releaseYear: "2016",
+    content:
+      "La La Land (128 min): A jazz musician and actress chase their dreams in Los Angeles. Directed by Damien Chazelle. Musical/Romance, rated about 8.0 on IMDb.",
+  },
+  // Duplicated
+  {
+    title: "Mission: Impossible – The Final Reckoning",
+    releaseYear: "2025",
+    content:
+      "Mission: Impossible – The Final Reckoning (169 min): Ethan Hunt and his team face a ruthless AI system named 'The Entity' that threatens global security. Starring Tom Cruise, Simon Pegg, Ving Rhames. Directed by Christopher McQuarrie. Released May 23, 2025. Action/Adventure thriller.",
+  },
+  {
+    title: "Thunderbolts",
+    releaseYear: "2025",
+    content:
+      "Thunderbolts (127 min): A covert government‑sanctioned team of super‑villains, including Yelena Belova and Bucky Barnes, must execute a dangerous mission while confronting their own turbulent pasts. Directed by Jake Schreier. Released May 2, 2025. Action/Sci‑Fi.",
+  },
+  {
+    title: "Jurassic World Rebirth",
+    releaseYear: "2025",
+    content:
+      "Jurassic World Rebirth (approx 140 min): A family stranded on a dinosaur‑infested island fight for survival when prehistoric predators emerge. Directed by Gareth Edwards. Released July 2, 2025. Sci‑Fi/Adventure.",
+  },
+  {
+    title: "Superman",
+    releaseYear: "2025",
+    content:
+      "Superman (approx 145 min): Clark Kent returns as Superman to reconcile his Kryptonian heritage with human life and battle Lex Luthor. Starring David Corenswet. Directed by James Gunn. Released July 11, 2025. Action/Superhero.",
+  },
+  {
+    title: "Elio",
+    releaseYear: "2025",
+    content:
+      "Elio (approx 95 min): A young boy is accidentally recruited as Earth’s ambassador to an interplanetary organization after being beamed up by aliens. Voices include Yonas Kibreab, Zoë Saldaña. Released June 20, 2025. Animated/Sci‑Fi Comedy.",
   },
 ];
 

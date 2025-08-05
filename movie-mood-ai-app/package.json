@@ -1,5 +1,14 @@
 {
   "dependencies": {
     "react-icons": "^5.5.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.2",
+    "@types/node": "^24.2.0",
+    "concurrently": "^9.2.0"
+  },
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix client\" \"npm run dev --prefix server\"",
+    "postinstall": "npm install --prefix client && npm install --prefix server"
   }
 }

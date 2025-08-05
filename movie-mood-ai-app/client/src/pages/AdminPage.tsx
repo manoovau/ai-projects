@@ -9,18 +9,40 @@ interface credentailsType {
 
 export const AdminPage = () => {
   const [adminPage, setAdminPage] = useState<string>("");
-  const [credentials, setCredentials] = useState<credentailsType>({
+  const [credentialsIn, setCredentialsIn] = useState<credentailsType>({
     username: "",
     pw: "",
   });
+  const [isLogin, setIsLogin] = useState<boolean>(false);
 
-  console.log(adminPage);
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(credentialsIn),
+      });
+
+      if (!res.ok) {
+        throw new Error("Login failed");
+      }
+
+      const data = await res.json();
+      setIsLogin(data.success);
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Login failed. Please check your credentials.");
+    }
+  };
+
   return (
     <div>
-      {credentials ? (
+      {!isLogin ? (
         <div>
           <form
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={handleLogin}
             className="bg-darkBlue text-white p-6 rounded-xl max-w-lg mx-auto space-y-6 shadow-lg"
           >
             <div>
@@ -31,9 +53,12 @@ export const AdminPage = () => {
                 type="text"
                 id="username"
                 name="username"
-                value={credentials.username}
+                value={credentialsIn.username}
                 onChange={(e) =>
-                  setCredentials({ ...credentials, username: e.target.value })
+                  setCredentialsIn({
+                    ...credentialsIn,
+                    username: e.target.value,
+                  })
                 }
                 className="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Username"
@@ -48,15 +73,20 @@ export const AdminPage = () => {
                 type="text"
                 id="password"
                 name="password"
-                value={credentials.pw}
+                value={credentialsIn.pw}
                 onChange={(e) =>
-                  setCredentials({ ...credentials, pw: e.target.value })
+                  setCredentialsIn({ ...credentialsIn, pw: e.target.value })
                 }
                 className="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Password"
                 required
               />
             </div>
+            <button
+              className={`bg-green-600 hover:bg-green-700 mx-4 px-4 py-2 rounded-md font-semibold transition`}
+            >
+              Login
+            </button>
           </form>
         </div>
       ) : (
@@ -79,7 +109,7 @@ export const AdminPage = () => {
 
           <div className="w-full max-w-4xl">
             {adminPage === "profile" && <AdminProfile />}
-            {adminPage === "action" && <AdminActions />}
+            {adminPage === "action" && <AdminActions isLogin={isLogin} />}
           </div>
         </div>
       )}

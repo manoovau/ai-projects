@@ -1,10 +1,12 @@
 import { useState } from "react";
 import movies from "../data/content";
 
-export const AdminActions = () => {
-  const [loading, setLoading] = useState(false);
+interface Props {
+  isLogin: boolean;
+}
 
-  const [isAuth, setAuth] = useState(false);
+export const AdminActions = ({ isLogin }: Props) => {
+  const [loading, setLoading] = useState(false);
 
   const seedMovies = async () => {
     setLoading(true);
@@ -18,11 +20,22 @@ export const AdminActions = () => {
 
       const data = await response.json();
 
+      console.log("data");
+      console.log(data);
+
+      console.log("response");
+      console.log(response);
+
       if (response.ok) {
-        alert("✅ Movies seeded successfully!");
+        alert(
+          `${data.message} 
+          Entries inserted ${data.inserted}. 
+          Entries duplicated ${data.duplicates}`
+        );
         console.log(data);
       } else {
-        alert("❌ Failed to seed movies");
+        alert(`❌ Failed to seed movies.
+          ${data.message}`);
         console.error(data);
       }
     } catch (err) {
@@ -40,10 +53,10 @@ export const AdminActions = () => {
 
       <button
         onClick={seedMovies}
-        disabled={loading || !isAuth}
+        disabled={loading || !isLogin}
         className={`w-full px-4 py-2 rounded font-medium transition duration-150 flex items-center justify-center space-x-2
     ${
-      loading || !isAuth
+      loading || !isLogin
         ? "bg-gray-400 cursor-not-allowed text-gray-700"
         : "bg-blue-600 hover:bg-blue-700 text-white"
     }
@@ -54,10 +67,10 @@ export const AdminActions = () => {
             <span className="animate-spin h-5 w-5 inline-block border-2 border-white border-t-transparent rounded-full"></span>
             <span>Loading...</span>
           </div>
-        ) : !isAuth ? (
+        ) : !isLogin ? (
           <div>
             <span>🔒</span>
-            <span>Please, login</span>
+            <span>Action not allowed</span>
           </div>
         ) : (
           <div>

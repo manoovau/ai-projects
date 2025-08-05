@@ -201,22 +201,123 @@ app.post("/api/embedding-search", async (req, res) => {
   }
 });
 
+const { z } = require("zod");
+
+// Schema for a single movie entry
+const movieSchema = z.object({
+  title: z.string().min(1),
+  releaseYear: z.string().min(1),
+  content: z.string().min(1),
+});
+
 // Add json file in supabase table
 app.post("/api/seed-movies", async (req, res) => {
   const movies = req.body;
 
+  // Validate movies array from body
+  if (!Array.isArray(movies)) {
+    return res.status(400).json({
+      error: "Request body must be an array of movie objects.",
+    });
+  }
+
+  // Validate each movie entry using Zod
+  const validMovies = [];
+  const invalidMovies = [];
+
+  movies.map((movie) => {
+    //Check if the given input (movie) matches the schema (movieSchema).
+    const result = movieSchema.safeParse(movie);
+    if (result.success) {
+      validMovies.push(result.data); // parsed & safe
+    } else {
+      invalidMovies.push(movie);
+    }
+  });
+
+  if (invalidMovies.length > 0) {
+    console.warn("❌ Invalid movie entries received:", invalidMovies);
+    return res.status(400).json({
+      message: "Invalid format. Please use the correct movie format.",
+      error: `Invalid movie entries: `,
+      invalidMovies: invalidMovies,
+      invalidCount: invalidMovies.length,
+    });
+  }
+
+  // If no valid movies
+  if (validMovies.length === 0) {
+    return res.status(400).json({
+      error: "No valid movie entries found in the request.",
+      invalidMovies,
+    });
+  }
+
   try {
-    // Prepare embedding input strings
-    const formattedMovies = movies.map((movie) => ({
+    // Fetch existing entries from Supabase
+    const { data: existingMovies, error: fetchError } = await supabase
+      .from("movie_mood")
+      .select("content");
+
+    if (fetchError) {
+      console.error("❌ Supabase fetch error:", fetchError);
+      return res.status(500).json({ error: "Failed to fetch existing movies" });
+    }
+
+    //Parse existing content to JS objects
+    const parsedExisting = existingMovies
+      .map((movie) => {
+        try {
+          // turn JSON string into object
+          return JSON.parse(movie.content);
+        } catch (e) {
+          // if it's corrupted or bad JSON
+          return null;
+        }
+      })
+      // remove nulls
+      .filter(Boolean);
+
+    // Create Set of unique keys: "title-releaseYear"
+    const existingSet = new Set(
+      parsedExisting.map(
+        (m) => `${m.title.toLowerCase().trim()}-${m.releaseYear.trim()}`
+      )
+    );
+
+    // Filter new entries
+    const newMovies = movies.filter((movie) => {
+      const key = `${movie.title
+        .toLowerCase()
+        .trim()}-${movie.releaseYear.trim()}`;
+      const isDuplicate = existingSet.has(key);
+      if (isDuplicate) {
+        console.log(
+          `⚠️ Duplicate movie skipped: ${movie.title} (${movie.releaseYear})`
+        );
+      }
+      return !isDuplicate;
+    });
+
+    if (newMovies.length === 0) {
+      return res.status(200).json({
+        message: "These movies already exist in the database.",
+        inserted: 0,
+        duplicates: movies.length,
+      });
+    }
+
+    // Prepare stringified and original entries
+    const formattedMovies = newMovies.map((movie) => ({
       stringified: JSON.stringify({
         title: movie.title,
         releaseYear: movie.releaseYear,
         content: movie.content,
       }),
+      // keep original data for reference
       original: movie,
     }));
 
-    // Generate embeddings
     const inputs = formattedMovies.map((m) => m.stringified);
     const embeddingResponse = await openai.embeddings.create({
       model: "text-embedding-ada-002",
@@ -225,24 +326,47 @@ app.post("/api/seed-movies", async (req, res) => {
 
     const embeds = embeddingResponse.data.map((d) => d.embedding);
 
-    // Insert into Supabase
+    // Insert validated entries into Supabase
     const inserts = formattedMovies.map((movie, i) => ({
       content: movie.stringified,
       embedding: embeds[i],
     }));
 
-    const { data, error } = await supabase.from("movie_mood").insert(inserts);
+    const { data: insertData, error: insertError } = await supabase
+      .from("movie_mood")
+      .insert(inserts);
 
-    if (error) {
-      console.error("❌ Supabase insert error:", error);
-      return res.status(500).json({ error: "Failed to insert movies" });
+    if (insertError) {
+      console.error("❌ Supabase insert error:", insertError);
+      return res.status(500).json({ error: "Failed to insert new movies" });
     }
 
-    res.status(200).json({ message: "✅ Movies inserted", data });
+    return res.status(200).json({
+      message: `✅ ${inserts.length} new movie(s) inserted`,
+      inserted: inserts.length,
+      duplicates: validMovies.length - inserts.length,
+    });
   } catch (error) {
-    console.error("❌ Error seeding movies with embedding:", error);
-    res.status(500).json({ error: "Server error seeding movies" });
+    console.error("❌ Server error during movie seeding:", {
+      message: error.message,
+      stack: error.stack,
+    });
+    res.status(500).json({ error: "Server error during movie seeding" });
   }
+});
+
+app.post("/api/login", (req, res) => {
+  const { username, pw } = req.body;
+
+  const isAuth =
+    username === process.env.ADMIN_USERNAME &&
+    pw === process.env.ADMIN_PASSWORD;
+
+  if (isAuth) {
+    return res.status(200).json({ success: true });
+  }
+
+  res.status(401).json({ success: false, message: "Invalid credentials" });
 });
 
 app.listen(port, () => {

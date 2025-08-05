@@ -32,15 +32,23 @@ Each recommended movie is displayed as a card that includes:
 
 ## Technologies Used
 
-- Next.js / React – Frontend framework
-- Supabase – Database and embeddings API
+- React / Vite / TypeScript – Frontend
+- Supabase – Embeddings and movie database
 - OpenAI API – ChatGPT + Embeddings
 - TMDB API – Fetch movie posters and metadata
 - Tailwind CSS – UI styling
+- Express – Backend
+- Playwright – End-to-end testing
 
 ## Download project.
 
 Clone movie-mood-ai-app folder. It includes all dependencies.
+
+```
+git clone https://github.com/manoovau/movie-mood-ai-app.git
+cd movie-mood-ai-app
+
+```
 
 ## API keys.
 
@@ -63,39 +71,77 @@ Clone movie-mood-ai-app folder. It includes all dependencies.
   sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
+### Supabase API KEY
+
+- Sign up or log in to Supabase: https://supabase.com/
+- Create a new project and `movie_mood` table or use an existing one. (contact me if you want to use the existing one)
+- Go to your project dashboard and select Settings > API.
+- Copy the URL and the anon/public API key.
+
+```
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_ANON_KEY=your-anon-public-api-key
+```
+
+### Create .env file
+
 - create ".env" file inside "sever" folder.
 - Add TMDb API key and OpenAI API KEY inside ".env" file and save changes:
 
 ```
 OPENAI_API_KEY=sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TMDB_API_KEY=your_tmdb_key_here
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_ANON_KEY=your-anon-public-api-key
 ```
 
-## Install package(s).
+## Install dependencies.
 
-1. Open terminnal, go to: client folder and run script `npm install` in the command line.
+1.1 Go to movie-mood-ai-app folder terminal and run script `npm install` in the command line.
+
+```
+ npm install
+```
+
+1.2 or you can run it separately in each folder if needed.
+
+1.2.1 Go to movie-mood-ai-app folder terminal and run script `npm install` in the command line.
+
+```
+ npm install
+```
+
+1.2.2 Open terminal, go to: client folder and run script `npm install` in the command line.
 
 ```
   cd client
-  npm run dev
+  npm install
 ```
 
-2. Open terminal, go to: server folder and run script `npm install` in the command line.
+1.2.3. Open terminal, go to: server folder and run script `npm install` in the command line.
 
 ```
   cd server
-  node index.js
+  npm install
 ```
 
 ## Open project.
 
-1. Go to client terminnal (client folder) and run script `npm run dev` in the command line.
+1.1 Go to movie-mood-ai-app folder terminal and run script `npm run dev` in the command line.
 
 ```
   npm run dev
 ```
 
-2. Go to server terminal (server folder) and run script `node index.js` in the command line.
+1.2 or you can run it separately in each folder if needed.
+
+1.2.1 Go to client terminnal (client folder) and run script `npm run dev` in the command line.
+
+```
+  npm run dev
+```
+
+1.2.2 Go to server terminal (server folder) and run script `node index.js` in the command line.
 
 ```
   node index.js
