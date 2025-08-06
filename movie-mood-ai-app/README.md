@@ -146,3 +146,17 @@ SUPABASE_ANON_KEY=your-anon-public-api-key
 ```
   node index.js
 ```
+
+## Run test.
+
+### Run tests in headless mode
+
+- Open new terminal.
+- Run script `npx playwright test` or `npm run test` in the command line
+- This will run all Playwright tests in the terminal and output results.
+
+### Starts the interactive UI mode.
+
+- Open new terminal.
+- Run script `npx playwright test --ui` or `npm run test:ui` in the command line.
+- This opens the Playwright Test Runner UI in your browser, allowing you to run and debug tests interactively.

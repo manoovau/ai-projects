@@ -9,6 +9,8 @@
   },
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix client\" \"npm run dev --prefix server\"",
-    "postinstall": "npm install --prefix client && npm install --prefix server"
+    "postinstall": "npm install --prefix client && npm install --prefix server && npx playwright install",
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui"
   }
 }
