@@ -5,7 +5,7 @@ export default defineConfig({
   testDir: "./tests",
   use: {
     baseURL: "http://localhost:5173",
-    browserName: "chromium",
+    channel: "chrome",
     headless: true,
   },
   webServer: {

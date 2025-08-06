@@ -1,4 +1,5 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import type { GroupLimitType } from "../pages/GroupPage";
 
 export interface Movie {
   title: string;
@@ -11,6 +12,7 @@ interface ResultProps {
   setPosition: Dispatch<SetStateAction<number>>;
   posStr: string;
   setResult: Dispatch<SetStateAction<Movie[] | null>>;
+  setGroupLimits?: Dispatch<SetStateAction<GroupLimitType>>;
 }
 
 export const Result = ({
@@ -18,6 +20,7 @@ export const Result = ({
   setPosition,
   posStr,
   setResult,
+  setGroupLimits,
 }: ResultProps) => {
   const { title, releaseYear, content } = movie;
   const [posterUrl, setPosterUrl] = useState<string | null>(null);
@@ -60,6 +63,10 @@ export const Result = ({
           onClick={() => {
             setResult(null);
             setPosition(0);
+            setGroupLimits?.({
+              people: 0,
+              time: "",
+            });
           }}
           className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-1 rounded-md transition duration-200"
         >

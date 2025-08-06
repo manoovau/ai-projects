@@ -45,6 +45,7 @@ export const GroupPage = () => {
           setPosition={setPosition}
           posStr={posStr}
           setResult={setResult}
+          setGroupLimits={setGroupLimits}
         />
       )}
     </div>
