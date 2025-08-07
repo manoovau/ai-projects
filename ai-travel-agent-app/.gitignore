@@ -1,0 +1,49 @@
+# Node modules (both backend and frontend)
+node_modules/
+
+# Build output folders
+dist/
+build/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories (explicit for clarity)
+client/node_modules/
+server/node_modules/
+
+# Vite cache
+client/node_modules/.vite/
+
+# TypeScript cache files
+*.tsbuildinfo
+
+# Environment variables (ignore all .env files in any folder)
+.env*
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# MacOS files
+.DS_Store
+
+# Optional npm cache folder
+.npm/
+
+# Optional eslint cache
+.eslintcache
+
+# Tailwind generated files (if any)
+public/tailwind.css
+
+# Misc
+*.swp
