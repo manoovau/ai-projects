@@ -1,11 +1,11 @@
-<h1>AI Projects 🤖🎬</h1>
+<h1>AI Projects 🤖</h1>
 
 This folder contains AI-powered projects leveraging modern technologies such as OpenAI, embeddings, and advanced APIs to build intelligent applications.
 <br />
 
 |      Project        | Description |
 | ------------------- | --------------- |
-| **Movie Mood AI App** | Smart movie recommendation based on your mood and group preferences powered by AI and embeddings. |
+| **Movie Mood AI App 🎬** | Smart movie recommendation based on your mood and group preferences powered by AI and embeddings. |
 
 
 ## Movie Mood AI App
